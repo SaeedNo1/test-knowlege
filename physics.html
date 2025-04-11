@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>物理挑战</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(to bottom right, #e0f7fa, #e1f5fe);
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #00796b;
+    }
+    .question {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px auto;
+      width: 80%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #009688;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00796b;
+    }
+    #timer {
+      font-size: 20px;
+      color: #d84315;
+    }
+  </style>
+</head>
+<body>
+  <h1>物理挑战</h1>
+  <div id="timer">倒计时：10:00</div>
+  <form id="quizForm"></form>
+  <button onclick="submitQuiz()">提交</button>
+  <button onclick="location.reload()">重新开始</button>
+  <button onclick="window.location.href='index.html'">返回主页</button>
+
+  <script>
+    const questions = [
+      {
+        q: "声音在空气中的传播速度大约是：",
+        options: ["340 m/s", "1500 m/s", "300000 km/s", "30 m/s"],
+        answer: 0,
+        score: 10
+      },
+      {
+        q: "杠杆原理中，若力臂变大，则所需的力将：",
+        options: ["变小", "变大", "不变", "无法判断"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "一个质量为2kg的物体，从5m高处自由下落，其动能将：",
+        options: ["逐渐增大", "逐渐减小", "保持不变", "先减后增"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "滑轮的主要作用是：",
+        options: ["改变力的方向或省力", "增加摩擦", "加快运动", "减小物体质量"],
+        answer: 0,
+        score: 10
+      },
+      {
+        q: "电压的单位是：",
+        options: ["A", "Ω", "V", "W"],
+        answer: 2,
+        score: 10
+      },
+      {
+        q: "一个物体所受合力为0，则它的状态将：",
+        options: ["保持静止或匀速直线运动", "加速", "减速", "转弯"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "下列哪个现象属于热传导？",
+        options: ["金属棒一端加热，另一端变热", "阳光晒在地上", "水壶沸腾", "风扇吹风"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "声音不能在以下哪种介质中传播？",
+        options: ["空气", "水", "金属", "真空"],
+        answer: 3,
+        score: 20
+      },
+      {
+        q: "电流的方向是：",
+        options: ["正电荷运动方向", "负电荷运动方向", "电子实际方向", "从高压到低压"],
+        answer: 0,
+        score: 20
+      },
+      {
+        q: "若一物体受力方向与运动方向相同，其速度将：",
+        options: ["增大", "减小", "不变", "变为0"],
+        answer: 0,
+        score: 20
+      },
+    ];
+
+    const selected = questions.sort(() => Math.random() - 0.5).slice(0, 10);
+    const form = document.getElementById("quizForm");
+
+    selected.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<strong>题目 ${i + 1}（${item.score}分）:</strong><br>${item.q}<br>`;
+      item.options.forEach((opt, j) => {
+        div.innerHTML += `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`;
+      });
+      form.appendChild(div);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      selected.forEach((item, i) => {
+        const radios = document.getElementsByName("q" + i);
+        for (let radio of radios) {
+          if (radio.checked && parseInt(radio.value) === item.answer) {
+            score += item.score;
+          }
+        }
+      });
+      alert("你的得分是：" + score + " / 150");
+    }
+
+    // 倒计时机制
+    let time = 600;
+    const timer = document.getElementById("timer");
+    const countdown = setInterval(() => {
+      let min = Math.floor(time / 60);
+      let sec = time % 60;
+      timer.innerText = `倒计时：${min}:${sec < 10 ? '0' : ''}${sec}`;
+      time--;
+      if (time < 0) {
+        clearInterval(countdown);
+        alert("时间到！");
+        submitQuiz();
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
