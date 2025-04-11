@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>生物挑战</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(to bottom right, #f1f8e9, #e8f5e9);
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #388e3c;
+    }
+    .question {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px auto;
+      width: 80%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #66bb6a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    #timer {
+      font-size: 20px;
+      color: #d84315;
+    }
+  </style>
+</head>
+<body>
+  <h1>生物挑战</h1>
+  <div id="timer">倒计时：10:00</div>
+  <form id="quizForm"></form>
+  <button onclick="submitQuiz()">提交</button>
+  <button onclick="location.reload()">重新开始</button>
+  <button onclick="window.location.href='index.html'">返回主页</button>
+
+  <script>
+    const questions = [
+      {
+        q: "植物进行光合作用的主要部位是：",
+        options: ["根", "茎", "叶", "花"],
+        answer: 2,
+        score: 10
+      },
+      {
+        q: "人的血液中运输氧的成分是：",
+        options: ["红细胞", "白细胞", "血小板", "血浆"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "下列哪一项是动物细胞特有的结构？",
+        options: ["细胞膜", "细胞核", "线粒体", "中心体"],
+        answer: 3,
+        score: 15
+      },
+      {
+        q: "哺乳动物的典型特征是：",
+        options: ["产卵", "有羽毛", "哺乳后代", "变态发育"],
+        answer: 2,
+        score: 10
+      },
+      {
+        q: "下列哪项结构不属于细胞器？",
+        options: ["线粒体", "叶绿体", "细胞核", "细胞壁"],
+        answer: 3,
+        score: 15
+      },
+      {
+        q: "人类的染色体数目为：",
+        options: ["23条", "46条", "22条", "44条"],
+        answer: 1,
+        score: 20
+      },
+      {
+        q: "生态系统中能量的来源主要是：",
+        options: ["水", "太阳", "空气", "土壤"],
+        answer: 1,
+        score: 10
+      },
+      {
+        q: "胚胎在母体子宫内发育的结构是：",
+        options: ["胎盘", "脐带", "羊水", "输卵管"],
+        answer: 0,
+        score: 20
+      },
+      {
+        q: "下列哪种动物不属于无脊椎动物？",
+        options: ["蚯蚓", "水母", "海星", "青蛙"],
+        answer: 3,
+        score: 20
+      },
+      {
+        q: "光合作用的产物是：",
+        options: ["二氧化碳和水", "葡萄糖和氧气", "葡萄糖和二氧化碳", "水和氧气"],
+        answer: 1,
+        score: 15
+      }
+    ];
+
+    const selected = questions.sort(() => Math.random() - 0.5).slice(0, 10);
+    const form = document.getElementById("quizForm");
+
+    selected.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<strong>题目 ${i + 1}（${item.score}分）:</strong><br>${item.q}<br>`;
+      item.options.forEach((opt, j) => {
+        div.innerHTML += `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`;
+      });
+      form.appendChild(div);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      selected.forEach((item, i) => {
+        const radios = document.getElementsByName("q" + i);
+        for (let radio of radios) {
+          if (radio.checked && parseInt(radio.value) === item.answer) {
+            score += item.score;
+          }
+        }
+      });
+      alert("你的得分是：" + score + " / 150");
+    }
+
+    // 倒计时机制
+    let time = 600;
+    const timer = document.getElementById("timer");
+    const countdown = setInterval(() => {
+      let min = Math.floor(time / 60);
+      let sec = time % 60;
+      timer.innerText = `倒计时：${min}:${sec < 10 ? '0' : ''}${sec}`;
+      time--;
+      if (time < 0) {
+        clearInterval(countdown);
+        alert("时间到！");
+        submitQuiz();
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
