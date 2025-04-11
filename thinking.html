@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>思维挑战</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(to right, #e1f5fe, #fce4ec);
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #7b1fa2;
+    }
+    .question {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px auto;
+      width: 85%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    button {
+      margin: 12px;
+      padding: 10px 25px;
+      background-color: #ab47bc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #8e24aa;
+    }
+    #timer {
+      font-size: 20px;
+      color: #d32f2f;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>思维挑战</h1>
+  <div id="timer">倒计时：10:00</div>
+  <form id="quizForm"></form>
+  <button onclick="submitQuiz()">提交</button>
+  <button onclick="location.reload()">重新开始</button>
+  <button onclick="window.location.href='index.html'">返回主页</button>
+
+  <script>
+    const questions = [
+      {
+        q: "一个篮子里有5个苹果，你拿走了3个，请问你手上有几个苹果？",
+        options: ["2个", "3个", "5个", "无法确定"],
+        answer: 1,
+        score: 10
+      },
+      {
+        q: "有一个数，去掉个位是6，去掉十位是2，这个数是多少？",
+        options: ["26", "62", "20", "无法确定"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "小明家住在30层，他每天都坐电梯到20层，然后走楼梯到30层，这是为什么？",
+        options: ["锻炼身体", "电梯坏了", "他太矮够不到30层按钮", "楼层限制"],
+        answer: 2,
+        score: 20
+      },
+      {
+        q: "甲说：“我在说谎”，这个陈述是真还是假？",
+        options: ["真", "假", "无法判断", "又真又假"],
+        answer: 2,
+        score: 20
+      },
+      {
+        q: "如果一根绳子要2分钟剪3刀，那剪9刀要几分钟？",
+        options: ["6", "8", "9", "5"],
+        answer: 0,
+        score: 15
+      },
+      {
+        q: "5个人赛跑，第一个比第二个快2秒，第二个比第三个快2秒……第五个比第六个快2秒。请问有几个人？",
+        options: ["5", "6", "无法判断", "7"],
+        answer: 1,
+        score: 10
+      },
+      {
+        q: "有一头狼吃掉了一只羊，这头狼还剩几条腿？",
+        options: ["4", "3", "2", "0"],
+        answer: 0,
+        score: 10
+      },
+      {
+        q: "你跑步比赛超过第二名，你现在是第几名？",
+        options: ["第一", "第二", "第三", "无法确定"],
+        answer: 1,
+        score: 10
+      },
+      {
+        q: "妈妈有三个孩子，大儿子叫一，一儿子叫二，三儿子叫什么？",
+        options: ["三", "妈妈", "什么", "无法判断"],
+        answer: 2,
+        score: 15
+      },
+      {
+        q: "两人下棋，下了五局，每人赢了3局，怎么可能？",
+        options: ["猜错了", "不是两人下的", "其中一局是平局", "他们互换身份"],
+        answer: 2,
+        score: 15
+      },
+      {
+        q: "小明昨天13岁，明年他就15岁了，小明生日是什么时候？",
+        options: ["12月31日", "1月1日", "2月29日", "6月1日"],
+        answer: 0,
+        score: 20
+      }
+    ];
+
+    const selected = questions.sort(() => Math.random() - 0.5).slice(0, 10);
+    const form = document.getElementById("quizForm");
+
+    selected.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<strong>题目 ${i + 1}（${item.score}分）:</strong><br>${item.q}<br>`;
+      item.options.forEach((opt, j) => {
+        div.innerHTML += `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`;
+      });
+      form.appendChild(div);
+    });
+
+    function submitQuiz() {
+      let score = 0;
+      selected.forEach((item, i) => {
+        const radios = document.getElementsByName("q" + i);
+        for (let radio of radios) {
+          if (radio.checked && parseInt(radio.value) === item.answer) {
+            score += item.score;
+          }
+        }
+      });
+      alert("你的得分是：" + score + " / 150");
+    }
+
+    let time = 600;
+    const timer = document.getElementById("timer");
+    const countdown = setInterval(() => {
+      let min = Math.floor(time / 60);
+      let sec = time % 60;
+      timer.innerText = `倒计时：${min}:${sec < 10 ? '0' : ''}${sec}`;
+      time--;
+      if (time < 0) {
+        clearInterval(countdown);
+        alert("时间到！");
+        submitQuiz();
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
